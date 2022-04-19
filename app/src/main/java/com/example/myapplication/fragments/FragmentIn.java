@@ -1,11 +1,11 @@
-package com.example.myapplication;
+package com.example.myapplication.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +14,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-public class FragmentOut extends Fragment {
+import com.example.myapplication.R;
+import com.example.myapplication.viewmodels.ViewModelIn;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
+public class FragmentIn extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
+
     @Nullable
     @Override
     public View onCreateView(
@@ -27,18 +34,18 @@ public class FragmentOut extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState
     ) {
-        View root = inflater.inflate(R.layout.fr_out, container, false);
+        View root = inflater.inflate(R.layout.fr_in, container, false);
 
-        ViewModelOut vm = new ViewModelProvider(this).get(ViewModelOut.class);
+        ViewModelIn vm = new ViewModelProvider(this).get(ViewModelIn.class);
 
-        TextView tv = root.findViewById(R.id.tx);
-        vm.getMessage().observe(getViewLifecycleOwner(), tv::setText);
+        EditText ed = root.findViewById(R.id.ed);
 
-        Button but = root.findViewById(R.id.but2);
+        Button but = root.findViewById(R.id.but);
         but.setOnClickListener(view -> {
+            vm.setMessage(ed.getText().toString());
             FragmentManager fm = requireActivity().getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.fc, new FragmentIn());
+            ft.replace(R.id.fc, new FragmentOut());
             ft.addToBackStack(null);
             ft.commit();
         });

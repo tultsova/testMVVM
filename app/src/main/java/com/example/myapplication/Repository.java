@@ -1,33 +1,37 @@
 package com.example.myapplication;
 
+import android.app.Application;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-public class Repository {
-    private static Repository instance;
+import java.util.ArrayList;
+import java.util.List;
 
-    public static Repository getInstance() {
-        if (instance == null) {
-            instance = new Repository();
-        }
-        return instance;
-    }
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
+public class Repository {
 
     private MutableLiveData<String> message;
+    private final LocalDataBase dataBase;
 
-    private Repository() {
+    @Inject
+    public Repository(Application application) {
+        dataBase = LocalDataBase.init(application);
+
+        List<ModelCard> data = new ArrayList<>();
+        data.add(new ModelCard("имя", "фамилия", 5));
+        data.add(new ModelCard("имя", "фамилия", 5));
+        data.add(new ModelCard("имя", "фамилия", 5));
+        data.add(new ModelCard("имя", "фамилия", 5));
+        data.add(new ModelCard("имя", "фамилия", 5));
+
+        dataBase.insertAllCards(data);
+
         message = new MutableLiveData<>();
         message.postValue("");
-        new Thread(() -> {
-            while (true) {
-                message.postValue(message.getValue()+"1");
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     public void setMessage(String message) {
@@ -36,5 +40,9 @@ public class Repository {
 
     public LiveData<String> getMessage() {
         return message;
+    }
+
+    public LiveData<List<ModelCard>> getAllCards() {
+        return dataBase.getAllCards();
     }
 }

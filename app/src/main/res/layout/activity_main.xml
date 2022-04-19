@@ -10,6 +10,6 @@
         android:id="@+id/fc"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:name="com.example.myapplication.FragmentIn"/>
+        android:name="com.example.myapplication.fragments.FragmentRecycler"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
